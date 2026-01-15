@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-cert-checker
+  labels:
+    app: website-cert-checker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website-cert-checker
+  template:
+    metadata:
+      labels:
+        app: website-cert-checker
+    spec:
+      containers:
+      - name: website-cert-checker
+        image: docker.io/library/cert-checker:latest
+        ## this is needed because the tag is latest and it defaults to ImagePullPolicy: Always according to the K8S docs.
+        ## Image is made available to the node via the command: kind load docker-image cert-checker:latest --name single-node-cluster
+        imagePullPolicy: IfNotPresent
